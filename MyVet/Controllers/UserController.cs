@@ -1,4 +1,5 @@
 ﻿using Infraestructure.Entity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyVetDomain.Services.Interface;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyVet.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserServices _userServices;
@@ -124,7 +126,7 @@ namespace MyVet.Controllers
             IActionResult response;
 
             var result = await _userServices.CreateUser(user);
-            if (result.Success)
+            if (result.IsSuccess)
             {
                 response = RedirectToAction(nameof(Index));
             }
