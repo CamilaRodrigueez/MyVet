@@ -44,7 +44,8 @@ namespace MyVet
                });
 
             #endregion
-
+            //Código para que el paquete nuget funcione refresque en tiempo de compilación.
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddControllersWithViews();
         }
 

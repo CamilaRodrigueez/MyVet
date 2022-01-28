@@ -35,6 +35,8 @@ namespace Infraestructure.Core.UnitOfWork.Interface
 
         IRepository<SexEntity> SexRepository { get; }
 
+        IRepository<TypePetEntity> TypePetRepository { get; }
+        IRepository<UserPetEntity> UserPetRepository { get; }
 
 
 

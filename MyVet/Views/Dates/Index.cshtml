@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Mis Citas";
+}
+<div class="row">
+    <div class="col-md-6">
+        <h1>Listado de mascotas</h1>
+    </div>
+    <div class="col-md-6">
+        <p>
+            <button class="btn btn-primary float-right" @*onclick="nuevaMascota()*@">
+
+                <i class="fas fa-table"></i> Nueva Cita
+            </button>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Mascota</th>
+                <th scope="col">Servicio</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Fecha Cierre</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="cuerpoDates"></tbody>
+    </table>
+
+</div>

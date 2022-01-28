@@ -27,6 +27,9 @@ namespace Infraestructure.Entity.Models
         public IEnumerable<RolUserEntity> RolUserEntities { get; set; }
         public IEnumerable<UserPetEntity>UserPetEntities { get; set; }
 
+        [NotMapped]
+        public string FullName { get { return $"{ this.Name} { this.LastName}"; } }
+
 
 
     }
