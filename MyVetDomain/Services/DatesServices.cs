@@ -133,6 +133,25 @@ namespace MyVetDomain.Services
             return response;
         }
 
+        public async Task<bool> UpdateDateAsync(DatesDto dates)
+        {
+            bool result = false;
+
+            DatesEntity datesEntity = _unitOfWork.DatesRepository.FirstOrDefault(x => x.Id == dates.IdDates);
+            if (datesEntity != null)
+            {
+                datesEntity.Contact = dates.Contact;
+                datesEntity.Date = dates.Date;
+                datesEntity.IdServives = dates.IdServives;
+                datesEntity.Name = dates.Name;
+
+                _unitOfWork.DatesRepository.Update(datesEntity);
+
+                result = await _unitOfWork.Save() > 0;
+            }
+
+            return result;
+        }
         #endregion
     }
 }

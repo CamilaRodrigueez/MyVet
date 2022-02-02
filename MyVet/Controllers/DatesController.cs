@@ -45,13 +45,6 @@ namespace MyVet.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        public IActionResult GetAllNamePets()
-        {
-            List<PetDto> response = _datesServices.GetAllNamePets();
-            return Ok(response);
-        }
-
         [HttpPost]
         public async Task<IActionResult> InsertDate(DatesDto dates)
         {
@@ -64,6 +57,13 @@ namespace MyVet.Controllers
         public async Task<IActionResult> DeleteDate(int idDate)
         {
             ResponseDto response = await _datesServices.DeleteDateAsync(idDate);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateDate(DatesDto dates)
+        {
+            bool response = await _datesServices.UpdateDateAsync(dates);
             return Ok(response);
         }
 

@@ -15,6 +15,7 @@ namespace MyVetDomain.Services.Interface
         List<PetDto> GetAllNamePets();
         Task<bool> InsertDateAsync(DatesDto dates);
         Task<ResponseDto> DeleteDateAsync(int idDate);
+        Task<bool> UpdateDateAsync(DatesDto dates);
 
     }
 }

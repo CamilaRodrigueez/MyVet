@@ -210,7 +210,7 @@
       function getNamePets(){
            modalProcesando(true);
          $.ajax({
-             url: '@Url.Action("GetAllNamePets", "Dates")',
+             url: '@Url.Action("GetAllMyPets", "Pet")',
              method: 'GET',
              dataType: "json",
              success: function (data) {

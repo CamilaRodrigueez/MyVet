@@ -7,7 +7,7 @@ namespace MyVetDomain.Dto
 {
     public class DatesDto
     {
-        [Key]
+     
         public int IdDates { get; set; }
 
         [DataType(DataType.Date)]
