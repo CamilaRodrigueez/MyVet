@@ -1,4 +1,4 @@
-﻿using Infraestructure.Core.Data;
+﻿ using Infraestructure.Core.Data;
 using Infraestructure.Core.Repository;
 using Infraestructure.Core.Repository.Interface;
 using Infraestructure.Core.UnitOfWork.Interface;

@@ -31,7 +31,7 @@ namespace Infraestructure.Entity.Models.Vet
         public string Description { get; set; }
 
         [ForeignKey("UserVetEntity")]
-        public int IdUserVet { get; set; }
+        public int? IdUserVet { get; set; }
         public UserEntity UserVetEntity { get; set; }
 
 

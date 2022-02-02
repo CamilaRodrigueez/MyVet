@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyVetDomain.Services
+namespace MyVet.Domain.Services
 {
-    public class PetServices: IPetServices
+    public class PetServices : IPetServices
     {
         #region Attributes
         private readonly IUnitOfWork _unitOfWork;
@@ -23,6 +23,8 @@ namespace MyVetDomain.Services
             _unitOfWork = unitOfWork;
         }
         #endregion
+
+
         #region Methods
         public List<PetDto> GetAllMyPets(int idUser)
         {
@@ -47,12 +49,24 @@ namespace MyVetDomain.Services
 
             return list;
         }
+
         private string CalculateAge(DateTime dateBorn)
         {
-            int meses = Math.Abs((DateTime.Now.Month - dateBorn.Month) + 12 * (DateTime.Now.Year - dateBorn.Year));
+            string result = string.Empty;
 
-            return $"{meses} meses";
+            int age = Math.Abs((DateTime.Now.Month - dateBorn.Month) + 12 * (DateTime.Now.Year - dateBorn.Year));
+
+            if (age != 0)
+                result = $"{age} meses";
+            else
+            {
+                TimeSpan resultDate = DateTime.Now.Date - dateBorn.Date;
+                result = $"{resultDate.Days} días";
+            }
+
+            return result;
         }
+
         public List<TypePetDto> GetAllTypePet()
         {
             List<TypePetEntity> typePets = _unitOfWork.TypePetRepository.GetAll().ToList();
@@ -65,6 +79,7 @@ namespace MyVetDomain.Services
 
             return list;
         }
+
         public List<SexDto> GetAllSexs()
         {
             List<SexEntity> sexs = _unitOfWork.SexRepository.GetAll().ToList();
@@ -77,6 +92,8 @@ namespace MyVetDomain.Services
 
             return list;
         }
+
+
         public async Task<ResponseDto> DeletePetAsync(int idPet)
         {
             ResponseDto response = new ResponseDto();
@@ -84,7 +101,7 @@ namespace MyVetDomain.Services
             _unitOfWork.PetRepository.Delete(idPet);
             response.IsSuccess = await _unitOfWork.Save() > 0;
             if (response.IsSuccess)
-                response.Message = "Se elminnó Correctamente la Mascota";
+                response.Message = "Se elminnó correctamente la Mascota";
             else
                 response.Message = "Hubo un error al eliminar la Mascota, por favor vuelva a intentalo";
 
@@ -125,6 +142,7 @@ namespace MyVetDomain.Services
             _unitOfWork.UserPetRepository.Insert(userPetEntity);
             return await _unitOfWork.Save() > 0;
         }
+
 
         public async Task<bool> UpdatePetAsync(PetDto pet)
         {

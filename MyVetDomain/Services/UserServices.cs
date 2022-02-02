@@ -1,4 +1,4 @@
-﻿using Common.Utils.Utils;
+﻿ using Common.Utils.Utils;
 using Infraestructure.Core.UnitOfWork.Interface;
 using Infraestructure.Entity.Models;
 using MyVetDomain.Dto;

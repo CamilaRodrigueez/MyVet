@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyVetDomain.Dto;
 using MyVetDomain.Services.Interface;
 using System;
@@ -25,15 +26,21 @@ namespace MyVet.Controllers
         #endregion
 
         #region Methods
+
         [HttpGet]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetAllMyPets()
         {
             var user = HttpContext.User;
             string idUser = user.Claims.FirstOrDefault(x => x.Type == TypeClaims.IdUser).Value;
 
             List<PetDto> list = _petServices.GetAllMyPets(Convert.ToInt32(idUser));
-
-            return View(list);
+            return Ok(list);
         }
 
         [HttpDelete]
@@ -49,6 +56,7 @@ namespace MyVet.Controllers
             List<SexDto> response = _petServices.GetAllSexs();
             return Ok(response);
         }
+
         [HttpGet]
         public IActionResult GetAllTypePet()
         {
@@ -70,10 +78,6 @@ namespace MyVet.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdatePet(PetDto pet)
         {
-            //var user = HttpContext.User;
-            //string idUser = user.Claims.FirstOrDefault(x => x.Type == TypeClaims.IdUser).Value;
-            //pet.IdUser = Convert.ToInt32(idUser);
-
             bool response = await _petServices.UpdatePetAsync(pet);
             return Ok(response);
         }

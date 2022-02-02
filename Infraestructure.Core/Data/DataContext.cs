@@ -39,6 +39,7 @@ namespace Infraestructure.Core.Data
                 .HasIndex(b => b.Email)
                 .IsUnique();
 
+            // este código es para hacer una excepción con los ID que les seteamos en el Enums
             modelBuilder.Entity<TypeStateEntity>().Property(t => t.IdTypeState).ValueGeneratedNever();
             modelBuilder.Entity<TypePermissionEntity>().Property(t => t.IdTypePermission).ValueGeneratedNever();
             modelBuilder.Entity<StateEntity>().Property(t => t.IdState).ValueGeneratedNever();
