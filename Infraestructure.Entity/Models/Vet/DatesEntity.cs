@@ -29,6 +29,8 @@ namespace Infraestructure.Entity.Models.Vet
 
         [MaxLength(300)]
         public string Description { get; set; }
+        [MaxLength(300)]
+        public string Observation { get; set; }
 
         [ForeignKey("UserVetEntity")]
         public int? IdUserVet { get; set; }

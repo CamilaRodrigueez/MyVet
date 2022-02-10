@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MyVet.Handlers;
 using MyVetDomain.Services.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace MyVet.Controllers
 {
     [Authorize]
+    [TypeFilter(typeof(CustomExceptionHandler))]
     public class UserController : Controller
     {
         private readonly IUserServices _userServices;

@@ -9,13 +9,14 @@ namespace MyVetDomain.Services.Interface
     public interface IDatesServices
     {
         List<DatesDto> GetAllMyDates(int idUser);
-        List<TypePetDto> GetAllTypePet();
-        List<StateDto> GetAllState();
         List<ServicesDto> GetAllServices();
-        List<PetDto> GetAllNamePets();
-        Task<bool> InsertDateAsync(DatesDto dates);
-        Task<ResponseDto> DeleteDateAsync(int idDate);
-        Task<bool> UpdateDateAsync(DatesDto dates);
+        Task<bool> InsertDatesAsync(DatesDto dates);
+        Task<ResponseDto> DeleteDatesAsync(int idDates);
+        Task<bool> UpdateDatesAsync(DatesDto dates);
+        Task<bool> CancelDatesAsync(int idDates, int? idUserVet);
+        List<DatesDto> GetAllDates(int idUser);
+        Task<bool> UpdateDatesVetAsync(DatesDto dates);
+
 
     }
 }
