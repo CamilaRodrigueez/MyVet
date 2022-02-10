@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace MyVetDomain.Services
 {
     public class DatesServices : IDatesServices
+
     {
         #region Attributes
         private readonly IUnitOfWork _unitOfWork;
@@ -24,60 +25,79 @@ namespace MyVetDomain.Services
         {
             _unitOfWork = unitOfWork;
         }
+
         #endregion
 
         #region Methods
+        public List<DatesDto> GetAllDates(int idUser)
+        {
+            var dates = _unitOfWork.DatesRepository.FindAll(x=>(x.IdUserVet==idUser || x.IdUserVet== null)
+                                                            , d => d.PetEntity.UserPetEntity
+                                                            , d => d.PetEntity.TypePetEntity
+                                                            , d => d.ServicesEntity
+                                                            , d => d.StateEntity).ToList();
+            var datesDeleteList = dates.Where(x => (x.IdState == (int)Enums.State.CitaCancelada && x.IdUserVet == null)).ToList();
+
+
+            var datesSelect = (from t in dates
+                               where !datesDeleteList.Any(x => x.Id == t.Id)
+                               select t).ToList();
+
+
+            List<DatesDto> list = datesSelect.Select(x => new DatesDto
+            {
+                IdDates = x.Id,
+                Name = $"{x.PetEntity.Name}  [{x.PetEntity.TypePetEntity.TypePet}]",
+                Contact = x.Contact,
+                Date = x.Date,
+                IdServives = x.IdServives,
+                IdPet = x.IdPet,
+                IdUserVet = x.IdUserVet,
+                IdState = x.IdState,
+                Estado = x.StateEntity.State,
+                ClosingDate = x.ClosingDate,
+                StrClosingDate = x.ClosingDate == null ? "No disponible" : x.ClosingDate.Value.ToString("yyyy-MM-dd"),
+                StrDate = x.Date.ToString("yyyy-MM-dd"),
+                Services = x.ServicesEntity.Services,
+                Description = x.Description,
+
+            }).OrderByDescending(f => f.Date).ToList();
+
+
+            return list;
+        } 
         public List<DatesDto> GetAllMyDates(int idUser)
         {
             var dates = _unitOfWork.DatesRepository.FindAll(p => p.PetEntity.UserPetEntity.IdUser == idUser
                                                             , d => d.PetEntity.UserPetEntity
+                                                            , d => d.PetEntity.TypePetEntity
                                                             , d => d.ServicesEntity
                                                             , d => d.StateEntity).ToList();
 
 
             List<DatesDto> list = dates.Select(x => new DatesDto
             {
-                Date = x.Date,
                 IdDates = x.Id,
-                IdPet = x.IdPet,
-                Name = x.PetEntity.Name,
+                Name = $"{x.PetEntity.Name}  [{x.PetEntity.TypePetEntity.TypePet}]",
+                Contact = x.Contact,
+                Date = x.Date,
                 IdServives = x.IdServives,
-                Services = x.ServicesEntity.Services,
+                IdPet = x.IdPet,
+                IdUserVet = x.IdUserVet,
                 IdState = x.IdState,
                 Estado = x.StateEntity.State,
                 ClosingDate = x.ClosingDate,
-                Contact = x.Contact,
+                StrClosingDate = x.ClosingDate == null ? "No disponible" : x.ClosingDate.Value.ToString("yyyy-MM-dd"),
+                StrDate = x.Date.ToString("yyyy-MM-dd"),
+                Services = x.ServicesEntity.Services,
+                Description = x.Description,
 
-            }).ToList();
+            }).OrderByDescending(f => f.Date).ToList();
 
-
-            return list;
-        }
-
-        public List<TypePetDto> GetAllTypePet()
-        {
-            List<TypePetEntity> typePets = _unitOfWork.TypePetRepository.GetAll().ToList();
-
-            List<TypePetDto> list = typePets.Select(x => new TypePetDto
-            {
-                IdTypePet = x.Id,
-                TypePet = x.TypePet
-            }).ToList();
 
             return list;
         }
-        public List<StateDto> GetAllState()
-        {
-            List<StateEntity> states = _unitOfWork.StateRepository.GetAll().ToList();
 
-            List<StateDto> list = states.Select(x => new StateDto
-            {
-                IdState = x.IdState,
-                State = x.State
-            }).ToList();
-
-            return list;
-        }
         public List<ServicesDto> GetAllServices()
         {
             List<ServicesEntity> services = _unitOfWork.ServicesRepository.GetAll().ToList();
@@ -90,68 +110,99 @@ namespace MyVetDomain.Services
 
             return list;
         }
-        public List<PetDto> GetAllNamePets()
+
+        public async Task<bool> InsertDatesAsync(DatesDto data)
         {
-            List<PetEntity> pets = _unitOfWork.PetRepository.GetAll().ToList();
-
-            List<PetDto> list = pets.Select(x => new PetDto
+            DatesEntity dates = new DatesEntity()
             {
-                Id = x.Id,
-                Name = x.Name
-            }).ToList();
-
-            return list;
-        }
-
-        public async Task<bool> InsertDateAsync(DatesDto dates)
-        {
-            DatesEntity datesEntity = new DatesEntity()
-            {
-                Contact = dates.Contact,
-                Date = dates.Date,
-                IdServives = dates.IdServives,
-                IdPet=dates.IdPet,
-                IdState =(int)Enums.State.CitaActiva,
-
+                Contact = data.Contact,
+                Date = data.Date,
+                Description = data.Description,
+                IdPet = data.IdPet,
+                IdServives = data.IdServives,
+                IdState = (int)Enums.State.CitaActiva,
             };
+            _unitOfWork.DatesRepository.Insert(dates);
 
-            _unitOfWork.DatesRepository.Insert(datesEntity);
             return await _unitOfWork.Save() > 0;
         }
 
-        public async Task<ResponseDto> DeleteDateAsync(int idDate)
+        public async Task<ResponseDto> DeleteDatesAsync(int idDates)
         {
             ResponseDto response = new ResponseDto();
 
-            _unitOfWork.DatesRepository.Delete(idDate);
+            _unitOfWork.DatesRepository.Delete(idDates);
             response.IsSuccess = await _unitOfWork.Save() > 0;
             if (response.IsSuccess)
-                response.Message = "Se elminnó correctamente la Cita";
+                response.Message = "Se elminnó correctamente la cita";
             else
-                response.Message = "Hubo un error al eliminar la Cita, por favor vuelva a intentalo";
+                response.Message = "Hubo un error al eliminar la cita, por favor vuelva a intentalo";
 
             return response;
         }
-
-        public async Task<bool> UpdateDateAsync(DatesDto dates)
+       
+        public async Task<bool> UpdateDatesAsync(DatesDto dates)
         {
             bool result = false;
 
             DatesEntity datesEntity = _unitOfWork.DatesRepository.FirstOrDefault(x => x.Id == dates.IdDates);
             if (datesEntity != null)
             {
+
                 datesEntity.Contact = dates.Contact;
                 datesEntity.Date = dates.Date;
+                datesEntity.Description = dates.Description;
+                datesEntity.IdPet = dates.IdPet;
                 datesEntity.IdServives = dates.IdServives;
-                datesEntity.Name = dates.Name;
+                datesEntity.IdState = datesEntity.IdState;
 
                 _unitOfWork.DatesRepository.Update(datesEntity);
+                result = await _unitOfWork.Save() > 0;
+            }
 
+            return result;
+        } 
+        public async Task<bool> UpdateDatesVetAsync(DatesDto dates)
+        {
+            bool result = false;
+
+            DatesEntity datesEntity = _unitOfWork.DatesRepository.FirstOrDefault(x => x.Id == dates.IdDates);
+            if (datesEntity != null)
+            {
+
+                datesEntity.Contact = dates.Contact;
+                datesEntity.Date = dates.Date;
+                datesEntity.Description = dates.Description;
+                datesEntity.IdPet = dates.IdPet;
+                datesEntity.IdServives = dates.IdServives;
+                datesEntity.IdState = (int)Enums.State.CitaFinalizada;
+                datesEntity.IdUserVet=dates.IdUserVet;
+                datesEntity.ClosingDate = DateTime.Now;
+                datesEntity.Observation = dates.Observation;
+
+                _unitOfWork.DatesRepository.Update(datesEntity);
                 result = await _unitOfWork.Save() > 0;
             }
 
             return result;
         }
+        public async Task<bool> CancelDatesAsync(int idDates, int? idUserVet)
+        {
+            bool result = false;
+
+            DatesEntity dates = _unitOfWork.DatesRepository.FirstOrDefault(x => x.Id == idDates);
+            if (dates != null)
+            {
+                dates.IdState = (int)Enums.State.CitaCancelada;
+                dates.ClosingDate = DateTime.Now;
+                dates.IdUserVet = idUserVet ?? null;
+                _unitOfWork.DatesRepository.Update(dates);
+                result = await _unitOfWork.Save() > 0;
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

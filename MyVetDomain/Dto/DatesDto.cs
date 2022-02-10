@@ -7,27 +7,30 @@ namespace MyVetDomain.Dto
 {
     public class DatesDto
     {
-     
         public int IdDates { get; set; }
 
-        [DataType(DataType.Date)]
-        [Required(ErrorMessage ="La fecha es requerida")]
-        [Display(Name = "Fecha Cita")]
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "La Mascota es requerida")]
         public int IdPet { get; set; }
 
-        [Required(ErrorMessage = "El Servicio es requerido")]
         public int IdServives { get; set; }
 
-        [Required(ErrorMessage = "El Estado es requerido")]
+        public int? IdUserVet { get; set; }
+
         public int IdState { get; set; }
         public DateTime? ClosingDate { get; set; }
         public string Name { get; set; }
         public string Services { get; set; }
         public string Estado { get; set; }
-        public string Contact { get; set; }
 
+        [MaxLength(300)]
+        public string Description { get; set; } 
+        [MaxLength(300)]
+        public string Observation { get; set; }
+
+        [MaxLength(100)]
+        public string Contact { get; set; }
+        public string StrClosingDate { get; set; }
+        public string StrDate { get; set; }
     }
 }

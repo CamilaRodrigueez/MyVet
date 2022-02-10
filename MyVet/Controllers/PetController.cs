@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MyVet.Handlers;
 using MyVetDomain.Dto;
 using MyVetDomain.Services.Interface;
 using System;
@@ -12,6 +13,7 @@ using static Common.Utils.Constant.Const;
 namespace MyVet.Controllers
 {
     [Authorize]
+    [TypeFilter(typeof(CustomExceptionHandler))]
     public class PetController : Controller
     {
         #region Attribute

@@ -7,7 +7,7 @@ namespace MyVetDomain.Dto
 {
     public class ServicesDto
     {
-        [Key]
+
         public int IdServices { get; set; }
         public string Services { get; set; }
         public string Description { get; set; }
