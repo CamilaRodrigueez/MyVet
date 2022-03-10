@@ -72,7 +72,7 @@ namespace Common.Utils.RestServices
                 if (headers.Count > 0)
                 {
                     foreach (var header in headers)
-                    {
+                    { 
                         if (header.Key == "Token")
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", header.Value);
                         else

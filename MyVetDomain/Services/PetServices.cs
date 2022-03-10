@@ -18,7 +18,7 @@ namespace MyVet.Domain.Services
         #region Attribute
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRestService _restService;
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _config; 
         #endregion
 
         #region Builder

@@ -38,7 +38,7 @@ namespace MyVet.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMyPets()
         {
-            var user = HttpContext.User;
+            var user = HttpContext.User; 
             string token = user.Claims.FirstOrDefault(x => x.Type == TypeClaims.Token).Value;
 
             //List<PetDto> list =await _petServices.GetAllMyPets(token);

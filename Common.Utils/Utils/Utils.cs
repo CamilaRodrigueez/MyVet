@@ -26,7 +26,7 @@ namespace Common.Utils.Utils
             return result;
         }
 
-        /// <summary>
+        /// <summary> 
         /// Method to get value claim from JwtToken
         /// </summary>
         /// <param name="authorization"> Request.Headers["Authorization"] </param>

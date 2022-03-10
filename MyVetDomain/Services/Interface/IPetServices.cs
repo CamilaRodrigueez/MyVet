@@ -10,7 +10,7 @@ namespace MyVetDomain.Services.Interface
     {
         Task<ResponseDto> GetAllMyPets(string token);
         List<TypePetDto> GetAllTypePet();
-        List<SexDto> GetAllSexs();
+        List<SexDto> GetAllSexs(); 
         Task<ResponseDto> DeletePetAsync(int idPet);
         Task<bool> InsertPetAsync(PetDto pet);
         Task<bool> UpdatePetAsync(PetDto pet);

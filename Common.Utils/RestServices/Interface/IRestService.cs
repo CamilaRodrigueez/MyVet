@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Common.Utils.RestServices.Interface
 {
     public interface IRestService
-    {
+    { 
         Task<T> PostRestServiceAsync<T>(string url, string controller,
         string method, object parameters, IDictionary<string, string> headers);
 

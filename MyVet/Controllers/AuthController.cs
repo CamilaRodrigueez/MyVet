@@ -37,7 +37,7 @@ namespace MyVet.Controllers
             {
                 ResponseDto response = await _userServices.Login(user);
 
-                if (!response.IsSuccess)
+                if (!response.IsSuccess) 
                 {
                     ModelState.Clear();
                     ModelState.AddModelError(string.Empty, response.Message);
