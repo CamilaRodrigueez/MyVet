@@ -1,6 +1,9 @@
 ﻿@using Common.Utils.Enums
 @using static Common.Utils.Constant.Const
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
 @{
     ViewData["Title"] = "Mis Citas";
 
@@ -99,8 +102,13 @@
                                     </textarea>
                             </div>
                         </div>
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -263,6 +271,7 @@
                  }
           });
      }
+<<<<<<< HEAD
 
     function cargarServicios(data, selected) {
          $("#cmbServicio").empty();
@@ -277,6 +286,22 @@
          });
      }
 
+=======
+
+    function cargarServicios(data, selected) {
+         $("#cmbServicio").empty();
+         $("#cmbServicio").append('<option value="" disabled selected>Seleccione un Servicio</option>');
+         $.each(data, function (i, lista) {
+             if (data[i].id == selected) {
+                 $("#cmbServicio").append('<option value="' + data[i].id + '"selected>' + data[i].services + '</option>');
+             }
+             else {
+                 $("#cmbServicio").append('<option value="' + data[i].id + '">' + data[i].services + '</option>');
+             }
+         });
+     }
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
      function getAllMyPets()
      {
          modalProcesando(true);
@@ -359,9 +384,15 @@
                      dataType: "json",
                      success: function (data) {
                          modalProcesando(false);
+<<<<<<< HEAD
 
                          console.log(listaPets);
 
+=======
+
+                         console.log(listaPets);
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
                          if (data){
                              $('#modalDates').modal('hide');
                              limpiarForm();
@@ -442,6 +473,7 @@
      {
          var combo=document.getElementById("cmbPet");
          idPet = combo.options[combo.selectedIndex].value;
+<<<<<<< HEAD
      }
 
      function editarDates(id)
@@ -472,6 +504,38 @@
         $('#modalDates').modal({keyboard:true});
      }
 
+=======
+     }
+
+     function editarDates(id)
+     {
+         idDates=id;
+         let dates= listMyDates.find(x=>x.id==idDates);
+
+         idPet=dates.idPet;
+         idServicio=dates.idServices;
+         idState=dates.idState;
+
+         $('#txtContactoDate').val(dates.contact);
+         $('#txtDescripcion').val(dates.description);
+
+         //setear fechas
+         var now = new Date(dates.date);
+         var day = ("0" + now.getDate()).slice(-2);
+         var month = ("0" + (now.getMonth() + 1)).slice(-2);
+         var today = now.getFullYear()+"-"+(month)+"-"+(day);
+
+         $('#txtDate').val(today)
+
+
+         cargarServicios(listServices,idServicio);
+         cargarPets(listaPets,idPet);
+
+        $('#idTituloModalDates').html("Editar Cita");
+        $('#modalDates').modal({keyboard:true});
+     }
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
     function cancelarDates(id)
     {
          Swal.fire({

@@ -1,6 +1,9 @@
 ﻿@using Common.Utils.Enums
 @using static Common.Utils.Constant.Const
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
 @{
     ViewData["Title"] = "Mis Mascotas";
     var idRols = User.Claims.FirstOrDefault(x => x.Type == TypeClaims.IdRol).Value;
@@ -16,7 +19,9 @@
     <h1>Listado de mascotas</h1>
 
 
+    <p>
 
+<<<<<<< HEAD
     <p>
 
         <button class="btn btn-primary" onclick="nuevaMascota()">
@@ -27,6 +32,16 @@
 
     <div class="row">
 
+=======
+        <button class="btn btn-primary" onclick="nuevaMascota()">
+
+            <i class="fas fa-paw"></i> Nuevo Mascota
+        </button>
+    </p>
+
+    <div class="row">
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
         <table class="table">
             <thead class="thead-dark">
                 <tr>

@@ -17,7 +17,10 @@ namespace MyVetDomain.Services.Interface
         List<DatesDto> GetAllDates(int idUser);
         Task<bool> UpdateDatesVetAsync(DatesDto dates);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
 
     }
 }

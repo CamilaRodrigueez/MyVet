@@ -27,7 +27,10 @@ namespace MyVet.Controllers
         }
         #endregion
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
         #region Views
         [HttpGet]
         public IActionResult Index()
@@ -83,8 +86,23 @@ namespace MyVet.Controllers
 
         [HttpPut]
         public async Task<IActionResult> UpdateDates(DatesDto dates)
+<<<<<<< HEAD
         {
             bool response = await _datesServices.UpdateDatesAsync(dates);
+            return Ok(response);
+        } 
+        [HttpPut]
+        public async Task<IActionResult> UpdateDatesVet(DatesDto dates)
+        {
+            var user = HttpContext.User;
+            string idUser = user.Claims.FirstOrDefault(x => x.Type == TypeClaims.IdUser).Value;
+            dates.IdUserVet = Convert.ToInt32(idUser);
+
+            bool response = await _datesServices.UpdateDatesVetAsync(dates);
+=======
+        {
+            bool response = await _datesServices.UpdateDatesAsync(dates);
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
             return Ok(response);
         } 
         [HttpPut]
@@ -103,6 +121,12 @@ namespace MyVet.Controllers
             bool result = await _datesServices.CancelDatesAsync(idDates, idUserVet: null);
             return Ok(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> CancelDates(int idDates)
+        {
+            bool result = await _datesServices.CancelDatesAsync(idDates, idUserVet: null);
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<IActionResult> CancelDatesVet(int idDates)
@@ -114,6 +138,19 @@ namespace MyVet.Controllers
             return Ok(result);
         }
 
+<<<<<<< HEAD
+=======
+        [HttpGet]
+        public async Task<IActionResult> CancelDatesVet(int idDates)
+        {
+            var user = HttpContext.User;
+            string idUser = user.Claims.FirstOrDefault(x => x.Type == TypeClaims.IdUser).Value;
+
+            bool result = await _datesServices.CancelDatesAsync(idDates, Convert.ToInt32(idUser));
+            return Ok(result);
+        }
+
+>>>>>>> 92729572224ef07c47efca2ba9435415248461ad
 
         #endregion
     }
