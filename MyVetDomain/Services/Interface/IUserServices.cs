@@ -10,7 +10,7 @@ namespace MyVetDomain.Services.Interface
     public  interface IUserServices
     {
         #region Auth
-        ResponseDto Login(UserDto user);
+        Task<ResponseDto> Login(UserDto user);
         Task<ResponseDto> Register(UserDto data);
         #endregion
         #region Methods Crud

@@ -1,7 +1,10 @@
-﻿ using Common.Utils.Utils;
+﻿using Common.Utils.RestServices.Interface;
+using Common.Utils.Utils;
 using Infraestructure.Core.UnitOfWork.Interface;
 using Infraestructure.Entity.Models;
+using Microsoft.Extensions.Configuration;
 using MyVetDomain.Dto;
+using MyVetDomain.Dto.RestServices;
 using MyVetDomain.Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,13 +18,17 @@ namespace MyVetDomain.Services
     public class UserServices : IUserServices
     {
         #region Attribute
-        private readonly IUnitOfWork _unitOfWork; 
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IRestService _restService;
+        private readonly IConfiguration _config;
         #endregion
 
         #region Builder
-        public UserServices(IUnitOfWork unitOfWork)
+        public UserServices(IUnitOfWork unitOfWork, IRestService restService, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
+            _restService= restService;
+            _config = config;
         }
         #endregion
 
@@ -29,26 +36,39 @@ namespace MyVetDomain.Services
 
 
         #region authentication
-        public ResponseDto Login(UserDto user)
+        public async Task<ResponseDto> Login(UserDto user)
         {
-            ResponseDto response = new ResponseDto();
 
-            UserEntity result = _unitOfWork.UserRepository.FirstOrDefault(x => x.Email == user.UserName
-                                                                            && x.Password == user.Password,
-                                                                           r => r.RolUserEntities);
-            if (result == null)
-            {
-                response.Message = "Usuario o contraseña inválida!";
-                response.IsSuccess = false;
-            }
-            else
-            {
-                response.Result = result;
-                response.IsSuccess = true;
-                response.Message = "Usuario autenticado!";
-            }
+            string urlBase = _config.GetSection("ApiMyVet").GetSection("UrlBase").Value;
+            string controller = _config.GetSection("ApiMyVet").GetSection("ControlerAuthentication").Value;
+            string method = _config.GetSection("ApiMyVet").GetSection("MethodLogin").Value;
 
-            return response;
+            LoginDto parameters = new LoginDto()
+            {
+                Password = user.Password,
+                UserName = user.UserName,
+            };
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            ResponseDto resultToken = await _restService.PostRestServiceAsync<ResponseDto>(urlBase, controller, method, parameters, headers);
+
+            return resultToken;
+
+            //ResponseDto response = new ResponseDto();
+            //UserEntity result = _unitOfWork.UserRepository.FirstOrDefault(x => x.Email == user.UserName
+            //                                                                && x.Password == user.Password,
+            //                                                               r => r.RolUserEntities);
+            //if (result == null)
+            //{
+            //    response.Message = "Usuario o contraseña inválida!";
+            //    response.IsSuccess = false;
+            //}
+            //else
+            //{
+            //    response.Result = result;
+            //    response.IsSuccess = true;
+            //    response.Message = "Usuario autenticado!";
+            //}
+
         }
         #endregion
 

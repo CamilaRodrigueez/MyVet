@@ -1,10 +1,13 @@
-﻿using Infraestructure.Entity.Models;
+﻿using Common.Utils.Utils;
+using Infraestructure.Entity.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyVet.Handlers;
 using MyVetDomain.Dto;
+using MyVetDomain.Dto.RestServices;
 using MyVetDomain.Services.Interface;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +35,7 @@ namespace MyVet.Controllers
             [HttpPost]
             public async Task<IActionResult> Login(UserDto user)
             {
-                ResponseDto response = _userServices.Login(user);
+                ResponseDto response = await _userServices.Login(user);
 
                 if (!response.IsSuccess)
                 {
@@ -42,24 +45,34 @@ namespace MyVet.Controllers
                 }
                 else
                 {
-                    UserEntity userEntity = (UserEntity)response.Result;
+                //    UserEntity userEntity = (UserEntity)response.Result;
 
-                    var claims = new List<Claim>
+                //    var claims = new List<Claim>
+                //{
+                //    new Claim(ClaimTypes.Name, userEntity.FullName),
+                //    new Claim(TypeClaims.IdUser, userEntity.IdUser.ToString()),
+                //    new Claim(TypeClaims.UserName, userEntity.Email),
+                //    new Claim(TypeClaims.IdRol, string.Join(",",userEntity.RolUserEntities.Select(x=>x.IdRol))),
+                //};
+
+                TokenDto token = JsonConvert.DeserializeObject<TokenDto>(response.Result.ToString());
+                string idRoles = Utils.GetClaimValue(token.Token, TypeClaims.IdRol);
+                string idUser = Utils.GetClaimValue(token.Token, TypeClaims.IdUser);
+                var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, userEntity.FullName),
-                    new Claim(TypeClaims.IdUser, userEntity.IdUser.ToString()),
-                    new Claim(TypeClaims.UserName, userEntity.Email),
-                    new Claim(TypeClaims.IdRol, string.Join(",",userEntity.RolUserEntities.Select(x=>x.IdRol))),
+                    new Claim("Token", token.Token),
+                    new Claim("Expiration", token.Expiration.ToString()),
+                    new Claim(TypeClaims.IdRol,idRoles),
+                    new Claim(TypeClaims.IdUser,idUser),
                 };
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     var authProperties = new AuthenticationProperties
                     {
                         //AllowRefresh = <bool>,
                         // Refreshing the authentication session should be allowed.
 
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes((token.Expiration / 60)-10),
                         // The time at which the authentication ticket expires. A 
                         // value set here overrides the ExpireTimeSpan option of 
                         // CookieAuthenticationOptions set with AddCookie.
